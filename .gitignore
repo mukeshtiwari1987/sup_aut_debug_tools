@@ -1,3 +1,4 @@
+Do not track these files and folders
 .DS_Store
 *.idea/
 *.json
@@ -6,3 +7,7 @@
 *.pyc
 *.log
 __pycache__/
+
+
+Track these files
+!requirements.txt
