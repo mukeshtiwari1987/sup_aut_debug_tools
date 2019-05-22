@@ -1,0 +1,8 @@
+.DS_Store
+*.idea/
+*.json
+*.csv
+*.txt
+*.pyc
+*.log
+__pycache__/

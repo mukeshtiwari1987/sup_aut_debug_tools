@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>App Automate Session Details</title>
+    <link rel="icon" type="image/png" href="static/images/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='gs_sortable.js') }}"></script>
+    <script type="text/javascript">
+    // http://www.allmyscripts.com/Table_Sort/
+    var TSort_Data = new Array('my_table', 's', 's');
+    tsRegister();
+    </script>
+  </head>
+  <body>
+    <div class="back-to-upload">
+      <a href="/upload"><< Back to Upload Page</a>
+    </div>
+    <div class="table-container">
+      <table class="steelBlueCols" id="my_table">
+        <thead>
+          <tr>
+            <th>Session</th>
+            <th>Video Exists</th>
+            <th>Device</th>
+            <th>OS</th>
+            <th>OS Version</th>
+            <th>Browser Version</th>
+            <th>Application Name</th>
+            <th>Application URL</th>
+            <th>Time of Upload</th>
+            <th>Appium Logs</th>
+            <th>Device Logs</th>
+            <th>Session Status</th>
+            <th>Duration</th>
+            <th>Reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for data_list in output %}
+            <tr>
+              <td data-column="Session">{{ data_list['session_id']}}</td>
+              <td data-column="Video Exists">{{ data_list['video_exist']}}</td>
+              <td data-column="Device">{{ data_list['device']}}</td>
+              <td data-column="OS">{{ data_list['os']}}</td>
+              <td data-column="OS Version">{{ data_list['os_version']}}</td>
+              <td data-column="Browser Version">{{ data_list['browser_version']}}</td>
+              <td data-column="Application Name">{{ data_list['app_name']}}</td>
+              <td data-column="Application URL">{{ data_list['app_url']}}</td>
+              <td data-column="Time of Upload">{{ data_list['upload_time']}}</td>
+              <td data-column="Appium Logs">{{ data_list['appium_logs']}}</td>
+              <td data-column="Device Logs">{{ data_list['device_logs']}}</td>
+              <td data-column="Session Status">{{ data_list['status']}}</td>
+              <td data-column="Duration">{{ data_list['duration']}}</td>
+              <td data-column="Reason">{{ data_list['reason']}}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
