@@ -9,7 +9,7 @@ The tool allows to view meta information of multiple Automate sessions in a sing
 ```
 git clone https://github.com/mukeshtiwari1987/sup_aut_debug_tools
 cd sup_aut_debug_tools
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 - If the packages have successfully installed, then execute `python3 app.py`
 - Now access http://localhost:5000 on your browser
