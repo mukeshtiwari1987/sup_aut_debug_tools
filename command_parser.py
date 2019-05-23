@@ -1,19 +1,13 @@
 import csv
-import os
 import sys
 import datetime
 import logging
 from parallel_download import download
+from setup import UPLOAD_FOLDER, DOWNLOAD_FOLDER, BROWSERSTACK_AUT_LOG_URL
 
 LOG_FILENAME = 'debug.log'
 format_string = '%(levelname)s: %(asctime)s: %(message)s'
 logging.basicConfig(level=logging.DEBUG, filename=LOG_FILENAME, format=format_string)
-
-
-UPLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/uploads/'
-DOWNLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/downloads/'
-BROWSERSTACK_URL = "https://automate.browserstack.com/logs/"
-AUTH = (os.environ["BROWSERSTACK_USERNAME"], os.environ["BROWSERSTACK_KEY"])
 
 
 def file_to_meta_extractor(file):
@@ -152,7 +146,7 @@ def information_merge(meta_info_list):
 
 def command_parser_main(csv_fn):
     meta_info_list = file_to_meta_extractor(csv_fn)
-    raw_log_urls_list = [BROWSERSTACK_URL + meta['hashed_id'] for meta in meta_info_list]
+    raw_log_urls_list = [BROWSERSTACK_AUT_LOG_URL + meta['hashed_id'] for meta in meta_info_list]
     download(raw_log_urls_list, DOWNLOAD_FOLDER)
     final_result = information_merge(meta_info_list)
 

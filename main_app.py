@@ -3,19 +3,17 @@ from flask import Flask, request, redirect, url_for, render_template, send_from_
 from werkzeug.utils import secure_filename
 import requests
 from command_parser import command_parser_main
+from setup import UPLOAD_FOLDER, DOWNLOAD_FOLDER
 
-UPLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/uploads/'
-DOWNLOAD_FOLDER = os.path.dirname(os.path.abspath(__file__)) + '/downloads/'
-ALLOWED_EXTENSIONS = {'json', 'csv'}
 
 app = Flask(__name__, static_url_path="/static")
-DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['DOWNLOAD_FOLDER'] = DOWNLOAD_FOLDER
 # limit upload size up to 8mb
 app.config['MAX_CONTENT_LENGTH'] = 8 * 1024 * 1024
 username = None
 password = None
+ALLOWED_EXTENSIONS = {'json', 'csv'}
 
 
 def allowed_file(filename):
