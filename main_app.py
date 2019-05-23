@@ -3,7 +3,7 @@ from flask import Flask, request, redirect, url_for, render_template, send_from_
 from werkzeug.utils import secure_filename
 import requests
 from command_parser import command_parser_main
-from setup import UPLOAD_FOLDER, DOWNLOAD_FOLDER
+from setup import UPLOAD_FOLDER, DOWNLOAD_FOLDER, rm_txt_from_downloads
 
 
 app = Flask(__name__, static_url_path="/static")
@@ -57,6 +57,7 @@ def upload_route_summary():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             results = command_parser_main(filename)
+            rm_txt_from_downloads()
             return render_template("automate.html", output_list=results)
     return render_template('upload.html')
 
