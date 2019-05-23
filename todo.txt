@@ -1,0 +1,8 @@
+download files in parallel thread
+handle os.environ in command_parser.txt
+create uploads and downloads folder
+Create base HTML
+navigation bar
+index out of bound error on  "command_response_time": command_response_time_list[i].strftime('%Y-%m-%d %H:%M:%S:%f')
+console log searcher
+Logging after every step
