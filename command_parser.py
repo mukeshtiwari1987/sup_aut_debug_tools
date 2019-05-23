@@ -3,7 +3,7 @@ import os
 import sys
 import datetime
 import logging
-from .parallel_download import download
+from parallel_download import download
 
 LOG_FILENAME = 'debug.log'
 format_string = '%(levelname)s: %(asctime)s: %(message)s'

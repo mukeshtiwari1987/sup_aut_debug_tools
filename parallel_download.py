@@ -4,7 +4,11 @@ import threading
 from queue import Queue
 import requests
 
-AUTH = (os.environ["BROWSERSTACK_USERNAME"], os.environ["BROWSERSTACK_KEY"])
+try:
+    AUTH = (os.environ["BROWSERSTACK_USERNAME"], os.environ["BROWSERSTACK_KEY"])
+except KeyError:
+    print("Ensure BROWSERSTACK_USERNAME and BROWSERSTACK_KEY has been set in environment variable.")
+    sys.exit(1)
 
 
 class DownloadThread(threading.Thread):
