@@ -1,9 +1,9 @@
 import csv
 import os
 import sys
-import requests
 import datetime
 import logging
+from parallel_download import download
 
 LOG_FILENAME = 'debug.log'
 format_string = '%(levelname)s: %(asctime)s: %(message)s'
@@ -21,13 +21,6 @@ def file_to_meta_extractor(file):
         meta_info_list = list(csv.DictReader(csv_file, delimiter=','))
 
     return meta_info_list
-
-
-def session_to_raw_log_downloader(session_id):
-    response = requests.get(BROWSERSTACK_URL + session_id, auth=AUTH)
-    raw_log_txt = DOWNLOAD_FOLDER + session_id + ".txt"
-    with open(raw_log_txt, 'wb') as raw_filename:
-        raw_filename.write(response.content)
 
 
 def raw_log_reader(file_path):
@@ -159,9 +152,8 @@ def information_merge(meta_info_list):
 
 def command_parser_main(csv_fn):
     meta_info_list = file_to_meta_extractor(csv_fn)
-
-    for meta in meta_info_list:
-        session_to_raw_log_downloader(meta['hashed_id'])
+    raw_log_urls_list = [BROWSERSTACK_URL + meta['hashed_id'] for meta in meta_info_list]
+    download(raw_log_urls_list, DOWNLOAD_FOLDER)
     final_result = information_merge(meta_info_list)
 
     return final_result
