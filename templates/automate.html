@@ -77,15 +77,10 @@
             <th>Session ID
               <input onkeyup="searchRows('my_table')" type="text"/>
             </th>
-            <th>Duration
-              <input onkeyup="searchRows('my_table')" type="text"/>
-            </th>
-            <th>Inside Time
-              <input onkeyup="searchRows('my_table')" type="text"/>
-            </th>
-            <th>Outside Time
-              <input onkeyup="searchRows('my_table')" type="text"/>
-            </th>
+            <th>Duration</th>
+            <th>Inside Time Sec</th>
+            <th>Outside Time Sec</th>
+            <th>Outside Time Percent</th>
             <th>Start Time
               <input onkeyup="searchRows('my_table')" type="text"/>
             </th>
@@ -125,8 +120,9 @@
               <td data-column="Session Name">{{ output_list[index]['session_name']}}</td>
               <td data-column="Session ID">{{ output_list[index]['session_id']}}</td>
               <td data-column="Duration">{{ output_list[index]['session_duration']}}</td>
-              <td data-column="Inside Time">{{ output_list[index]['inside_time'] }}</td>
-              <td data-column="Outside Time">{{ output_list[index]['outside_time']}}</td>
+              <td data-column="Inside Time Sec">{{ output_list[index]['inside_time_sec'] }}</td>
+              <td data-column="Outside Time Sec">{{ output_list[index]['outside_time_sec']}}</td>
+              <td data-column="Outside Time Percent">{{ output_list[index]['outside_time_percent']}}</td>
               <td data-column="Start Time">{{ output_list[index]['session_start_time'] }}</td>
               <td data-column="End Time">{{ output_list[index]['session_end_time']}}</td>
               <td data-column="OS">{{ output_list[index]['os']}}</td>
