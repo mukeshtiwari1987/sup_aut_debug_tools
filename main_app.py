@@ -32,19 +32,19 @@ def login():
                           auth=(username, password),
                           timeout=(5, 5)) as check:
             if check.headers['Status'] == '200 OK':
-                return redirect(url_for('upload_file'))
+                return redirect(url_for('aut_ss'))
             else:
                 error = "Unauthorized to proceed."
     return render_template("login.html", error=error)
 
 
-@app.route('/upload')
-def upload_file():
+@app.route('/autss')
+def aut_ss():
     return render_template('upload.html')
 
 
-@app.route('/upload.html', methods=['POST'])
-def upload_route_summary():
+@app.route('/slowsessionaut', methods=['POST'])
+def aut_ss_result():
     if request.method == 'POST':
         if 'file' not in request.files:
             print('No file attached in request')
@@ -58,8 +58,18 @@ def upload_route_summary():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             results = command_parser_main(filename)
             rm_txt_from_downloads()
-            return render_template("automate.html", output_list=results)
+            return render_template("autssresult.html", output_list=results)
     return render_template('upload.html')
+
+
+@app.route('/autvid')
+def aut_vid():
+    return render_template('autvid.html')
+
+
+@app.route('/autconsole')
+def aut_console():
+    return render_template('autconsole.html')
 
 
 if __name__ == '__main__':
