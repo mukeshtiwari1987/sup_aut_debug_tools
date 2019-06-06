@@ -52,7 +52,7 @@ def command_latency_calculator(session_raw_info):
     command_description_list = []
     command_request_time_list = []
     command_response_time_list = []
-    session_dict = {}
+    session_dict = dict()
 
     for line in session_raw_info:
         words = line.split()
@@ -80,19 +80,22 @@ def command_latency_calculator(session_raw_info):
             response_time_obj = datetime.datetime.strptime(response_time, '%Y-%m-%d %H:%M:%S:%f')
             command_response_time_list.append(response_time_obj)
 
-    for i in range(len(command_request_time_list)):
-        command_dict = {
-            "command_description": command_description_list[i],
-            "command_request_time": command_request_time_list[i].strftime('%Y-%m-%d %H:%M:%S:%f'),
-            "command_response_time": command_response_time_list[i].strftime('%Y-%m-%d %H:%M:%S:%f'),
-            "command_duration_seconds": time_stamp_calculator(command_response_time_list[i],
-                                                              command_request_time_list[i]
-                                                              ),
-            "command_time_group": command_time_group_calculator(command_response_time_list[i],
-                                                                command_request_time_list[i]
-                                                                )
-        }
-        command_information_list.append(command_dict)
+    try:
+        for i in range(len(command_request_time_list)):
+            command_dict = {
+                "command_description": command_description_list[i],
+                "command_request_time": command_request_time_list[i].strftime('%Y-%m-%d %H:%M:%S:%f'),
+                "command_response_time": command_response_time_list[i].strftime('%Y-%m-%d %H:%M:%S:%f'),
+                "command_duration_seconds": time_stamp_calculator(command_response_time_list[i],
+                                                                  command_request_time_list[i]
+                                                                  ),
+                "command_time_group": command_time_group_calculator(command_response_time_list[i],
+                                                                    command_request_time_list[i]
+                                                                    )
+            }
+            command_information_list.append(command_dict)
+    except Exception:
+        pass
 
     session_dict["command_information"] = command_information_list
 
@@ -122,24 +125,12 @@ def information_merge(meta_info_list):
     session_info_list = []
 
     for meta in meta_info_list:
-        raw_log_path = DOWNLOAD_FOLDER + meta['hashed_id'] + ".txt"
+        raw_log_path = DOWNLOAD_FOLDER + meta['hashed_id']
         session_raw_info = raw_log_reader(raw_log_path)
         session_dict = command_latency_calculator(session_raw_info)
-        session_dict["created_day"] = meta['created_day']
-        session_dict["user_id"] = meta['user_id']
-        session_dict["build_name"] = meta['build_name']
-        session_dict["build_id"] = meta['build_id']
-        session_dict["session_name"] = meta['session_name']
-        session_dict["hashed_id"] = meta['hashed_id']
-        session_dict["duration"] = meta['duration']
-        session_dict["inside_time_sec"] = meta['inside_time_sec']
-        session_dict["outside_time_sec"] = meta['outside_time_sec']
-        session_dict["outside_time_percent"] = meta['outside_time_percent']
-        session_dict["os"] = meta['os']
-        session_dict["os_version"] = meta['os_version']
-        session_dict["browser"] = meta['browser']
-        session_dict["browser_version"] = meta['browser_version']
-        session_dict["status"] = meta['status']
+
+        for key in meta.keys():
+            session_dict[key] = meta[key]
         session_info_list.append(session_dict)
 
     return session_info_list

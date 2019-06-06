@@ -2,8 +2,9 @@ import os
 from flask import Flask, request, redirect, url_for, render_template, send_from_directory
 from werkzeug.utils import secure_filename
 import requests
+from setup import UPLOAD_FOLDER, DOWNLOAD_FOLDER, rm_txt_from_downloads, rm_json_from_downloads
 from command_parser import command_parser_main
-from setup import UPLOAD_FOLDER, DOWNLOAD_FOLDER, rm_txt_from_downloads
+from vid_parser import vid_parser_main
 
 
 app = Flask(__name__, static_url_path="/static")
@@ -40,7 +41,7 @@ def login():
 
 @app.route('/autss')
 def aut_ss():
-    return render_template('upload.html')
+    return render_template('upload_autss.html')
 
 
 @app.route('/slowsessionaut', methods=['POST'])
@@ -59,12 +60,31 @@ def aut_ss_result():
             results = command_parser_main(filename)
             rm_txt_from_downloads()
             return render_template("autssresult.html", output_list=results)
-    return render_template('upload.html')
+    return render_template('upload_autss.html')
 
 
 @app.route('/autvid')
 def aut_vid():
-    return render_template('autvid.html')
+    return render_template('upload_autvid.html')
+
+
+@app.route('/vidstatusaut', methods=['POST'])
+def aut_vid_result():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            print('No file attached in request')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            print('No file selected')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            results = vid_parser_main(filename)
+            rm_json_from_downloads()
+            return render_template("autvidresult.html", output_list=results)
+    return render_template('upload_autvid.html')
 
 
 @app.route('/autconsole')

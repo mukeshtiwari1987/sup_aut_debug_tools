@@ -4,7 +4,7 @@
 <div class="sqlquery">
   SELECT
     DATE(created_day) as created_day,
-    user_id,
+    user.user_id as user_id,
     build_name,
     build_id,
     session_name,
@@ -30,10 +30,10 @@
 <div class="log-form file-upload-form">
   <form action="{{ url_for('aut_ss_result') }}" method="POST" enctype="multipart/form-data">
     <input type="file" name="file" id="fileToUpload" accept="text/csv">
-    <div class="check_app_automate">
-      <label>Check for App Automate:</label>
-      <input type="checkbox" name="app_automate" id="app_automate">
-    </div>
+    <!--<div class="check_app_automate">-->
+      <!--<label>Check for App Automate:</label>-->
+      <!--<input type="checkbox" name="app_automate" id="app_automate">-->
+    <!--</div>-->
     <input class="btn" type="submit" value="Upload File" name="submit">
   </form>
   {% if error %}

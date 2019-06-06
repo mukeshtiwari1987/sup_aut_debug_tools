@@ -12,6 +12,7 @@ class DownloadThread(threading.Thread):
         self.queue = queue
         self.destfolder = destfolder
         self.daemon = True
+        # self.file_type = file_type
 
     def run(self):
         while True:
@@ -26,9 +27,9 @@ class DownloadThread(threading.Thread):
         # change it to a different way if you require
         name = url.split('/')[-1]
         dest = os.path.join(self.destfolder, name)
-        print("[{}] Downloading {} -> {}.txt".format(self.ident, url, dest))
+        print("[{}] Downloading {} -> {}".format(self.ident, url, dest))
         response = requests.get(url, auth=AUTH)
-        raw_log_txt = dest + ".txt"
+        raw_log_txt = dest
 
         with open(raw_log_txt, 'wb') as raw_filename:
             raw_filename.write(response.content)
