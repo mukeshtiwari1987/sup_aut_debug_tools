@@ -27,7 +27,7 @@ class DownloadThread(threading.Thread):
         # change it to a different way if you require
         name = url.split('/')[-1]
         dest = os.path.join(self.destfolder, name)
-        print("[{}] Downloading {} -> {}".format(self.ident, url, dest))
+        # print("[{}] Downloading {} -> {}".format(self.ident, url, dest))
         response = requests.get(url, auth=AUTH)
         raw_log_txt = dest
 

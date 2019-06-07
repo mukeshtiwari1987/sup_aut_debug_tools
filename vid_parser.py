@@ -4,6 +4,7 @@ import datetime
 import logging
 import json
 import requests
+from joblib import Parallel, delayed
 from parallel_download import download
 from setup import UPLOAD_FOLDER, DOWNLOAD_FOLDER, BROWSERSTACK_AUT_SESSION_LOG_URL
 
@@ -27,29 +28,47 @@ def session_json_reader(file_path):
     return data
 
 
-def vid_status_fetcher(video_url):
-    session_dict = dict()
+def vid_status_thread(vuld):
 
-    with requests.get(video_url, stream=True, timeout=5) as video_url_response_data:
+    with requests.get(vuld["video_url"], stream=True, timeout=5) as video_url_response_data:
         if video_url_response_data.headers['Content-Type'] == 'application/octet-stream; charset=utf-8':
-            session_dict['video'] = "Yes"
+            video_url_dict = {
+                "video": "Yes",
+                "hashed_id": vuld["hashed_id"]
+            }
         else:
-            session_dict['video'] = "No"
+            video_url_dict = {
+                "video": "No",
+                "hashed_id": vuld["hashed_id"]
+            }
 
-    return session_dict
+    return video_url_dict
 
 
 def information_merge(meta_info_list):
     session_info_list = []
+    video_url_list = []
 
     for meta in meta_info_list:
         session_json = DOWNLOAD_FOLDER + meta['hashed_id'] + ".json"
-        vid_url = session_json_reader(session_json)
-        session_dict = vid_status_fetcher(vid_url)
+        video_url = session_json_reader(session_json)
+        video_url_dict = {
+            "hashed_id": meta['hashed_id'],
+            "video_url": video_url
+        }
+        video_url_list.append(video_url_dict)
+
+    video_url_dict_list = Parallel(n_jobs=10)(delayed(vid_status_thread)(vuld) for vuld in video_url_list)
+
+    for meta in meta_info_list:
+        session_dict = dict()
 
         for key in meta.keys():
             session_dict[key] = meta[key]
         session_info_list.append(session_dict)
+
+    # How to Merge Two Python Dictionaries - https://bit.ly/2MyVM48
+    session_info_list = [dict(session_info_list[i], **video_url_dict_list[i]) for i in range(len(session_info_list))]
 
     return session_info_list
 
@@ -57,8 +76,8 @@ def information_merge(meta_info_list):
 def vid_parser_main(csv_fn):
     file_type = ".json"
     meta_info_list = file_to_meta_extractor(csv_fn)
-    raw_log_urls_list = [BROWSERSTACK_AUT_SESSION_LOG_URL + meta['hashed_id'] + file_type for meta in meta_info_list]
-    download(raw_log_urls_list, DOWNLOAD_FOLDER)
+    session_urls_list = [BROWSERSTACK_AUT_SESSION_LOG_URL + meta['hashed_id'] + file_type for meta in meta_info_list]
+    download(session_urls_list, DOWNLOAD_FOLDER)
     final_result = information_merge(meta_info_list)
 
     return final_result
