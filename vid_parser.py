@@ -1,12 +1,10 @@
 import csv
 import sys
-import datetime
 import logging
 import json
-import requests
-from joblib import Parallel, delayed
 from parallel_download import download
 from setup import UPLOAD_FOLDER, DOWNLOAD_FOLDER, BROWSERSTACK_AUT_SESSION_LOG_URL
+from vid_parallel import main_cu
 
 LOG_FILENAME = 'debug.log'
 format_string = '%(levelname)s: %(asctime)s: %(message)s'
@@ -28,23 +26,6 @@ def session_json_reader(file_path):
     return data
 
 
-def vid_url_status(vuld):
-
-    with requests.get(vuld["video_url"], stream=True, timeout=5) as video_url_response_data:
-        if video_url_response_data.headers['Content-Type'] == 'application/octet-stream; charset=utf-8':
-            video_url_dict = {
-                "video": "Yes",
-                "hashed_id": vuld["hashed_id"]
-            }
-        else:
-            video_url_dict = {
-                "video": "No",
-                "hashed_id": vuld["hashed_id"]
-            }
-
-    return video_url_dict
-
-
 def vid_status_with_session(meta_info_list):
     video_url_list = []
 
@@ -57,7 +38,8 @@ def vid_status_with_session(meta_info_list):
         }
         video_url_list.append(video_url_dict)
 
-    video_url_dict_list = Parallel(n_jobs=10)(delayed(vid_url_status)(vuld) for vuld in video_url_list)
+    thread = 10
+    video_url_dict_list = main_cu(thread, video_url_list)
 
     return video_url_dict_list
 

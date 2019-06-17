@@ -1,51 +1,26 @@
-import sys
-import os
-import threading
-from queue import Queue
+from multiprocessing import Pool
 import requests
-from setup import AUTH
 
 
-class DownloadThread(threading.Thread):
-    def __init__(self, queue):
-        super(DownloadThread, self).__init__()
-        self.queue = queue
-        self.daemon = True
+def check_url(video_url_list):
 
-    def run(self):
-        while True:
-            url = self.queue.get()
-            try:
-                self.vid_status_fetcher(url)
-            except Exception as e:
-                print("Error: {}".format(e))
-            self.queue.task_done()
-
-    def vid_status_fetcher(self, url):
-        # change it to a different way if you require
-        vid_status_list = []
-
-        with requests.get(url, stream=True, timeout=5) as video_url_response_data:
+    with requests.get(video_url_list["video_url"], stream=True, timeout=5) as video_url_response_data:
             if video_url_response_data.headers['Content-Type'] == 'application/octet-stream; charset=utf-8':
-                vid_status_list.append("Yes")
+                video_url_dict = {
+                    "video": "Yes",
+                    "hashed_id": video_url_list["hashed_id"]
+                }
             else:
-                vid_status_list.append("No")
-        print(vid_status_list)
+                video_url_dict = {
+                    "video": "No",
+                    "hashed_id": video_url_list["hashed_id"]
+                }
 
-        return vid_status_list
-
-
-def vid_status_thread(urls, numthreads=10):
-    queue = Queue()
-    for url in urls:
-        queue.put(url)
-
-    for i in range(numthreads):
-        t = DownloadThread(queue)
-        t.start()
-
-    queue.join()
+    return video_url_dict
 
 
-if __name__ == "__main__":
-    vid_status_thread(sys.argv[1:], "/Users/mukeshtiwari/Desktop/tmp")
+def main_cu(thread, video_url_list):
+    p = Pool(processes=thread)
+    result = p.map(check_url, video_url_list)
+
+    return result
