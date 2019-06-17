@@ -3,27 +3,27 @@
 {% block content %}
 <div class="sqlquery">
   SELECT
-    DATE(created_day) as created_day,
-    user.user_id as user_id,
+    <br>DATE(created_day) AS created_day,
+    user.user_id AS user_id,
     build_name,
     build_id,
     session_name,
     hashed_id,
-    ROUND(duration, 2) as duration,
-    ROUND(bs_latency_mean, 2) as inside_time_sec,
-    ROUND(( duration - bs_latency_mean ), 2) as outside_time_sec,
-    ROUND(ROUND(( duration - bs_latency_mean ), 2) / duration * 100 , 2) as outside_time_percent,
+    <br>ROUND(duration, 2) AS duration,
+    ROUND(bs_latency_mean, 2) AS inside_time_sec,
+    ROUND(( duration - bs_latency_mean ), 2) AS outside_time_sec,
+    <br>ROUND(ROUND(( duration - bs_latency_mean ), 2) / duration * 100, 2) AS outside_time_percent,
     os,
     os_version,
     browser,
     browser_version,
     status
   <br>FROM</br>
-    [browserstack-1299:automate.partitioned_automation_session_stats]
+    [browserstack-production:automate.automate_test_sessions_partitioned]
   <br>WHERE</br>
-    _PARTITIONTIME >= "2019-05-10 00:00:00"
-    AND _PARTITIONTIME <= "2019-05-11 00:00:00"
-    AND group_id = 2
+    _PARTITIONTIME >= "2019-06-14 00:00:00"
+    AND _PARTITIONTIME <= "2019-06-15 00:00:00"
+    AND user.group_id = 2
   <br>LIMIT</br>
     100
 </div>
