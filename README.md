@@ -11,5 +11,5 @@ git clone https://github.com/mukeshtiwari1987/sup_aut_debug_tools
 cd sup_aut_debug_tools
 pip3 install -r requirements.txt
 ```
-- If the packages have successfully installed, then execute `python3 app.py`
+- If the packages have successfully installed, then execute `python3 main_app.py`
 - Now access http://localhost:5000 on your browser
