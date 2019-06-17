@@ -28,7 +28,7 @@ def session_json_reader(file_path):
     return data
 
 
-def vid_status_thread(vuld):
+def vid_url_status(vuld):
 
     with requests.get(vuld["video_url"], stream=True, timeout=5) as video_url_response_data:
         if video_url_response_data.headers['Content-Type'] == 'application/octet-stream; charset=utf-8':
@@ -45,8 +45,7 @@ def vid_status_thread(vuld):
     return video_url_dict
 
 
-def information_merge(meta_info_list):
-    session_info_list = []
+def vid_status_with_session(meta_info_list):
     video_url_list = []
 
     for meta in meta_info_list:
@@ -58,7 +57,14 @@ def information_merge(meta_info_list):
         }
         video_url_list.append(video_url_dict)
 
-    video_url_dict_list = Parallel(n_jobs=10)(delayed(vid_status_thread)(vuld) for vuld in video_url_list)
+    video_url_dict_list = Parallel(n_jobs=10)(delayed(vid_url_status)(vuld) for vuld in video_url_list)
+
+    return video_url_dict_list
+
+
+def information_merge(meta_info_list):
+    session_info_list = []
+    video_url_dict_list = vid_status_with_session(meta_info_list)
 
     for meta in meta_info_list:
         session_dict = dict()
