@@ -1,5 +1,6 @@
 import os
 import sys
+import shutil
 
 BROWSERSTACK_AUT_LOG_URL = "https://automate.browserstack.com/logs/"
 BROWSERSTACK_AUT_SESSION_LOG_URL = "https://api.browserstack.com/automate/sessions/"
@@ -7,7 +8,11 @@ BROWSERSTACK_AUT_SESSION_LOG_URL = "https://api.browserstack.com/automate/sessio
 try:
     AUTH = (os.environ["BROWSERSTACK_USERNAME"], os.environ["BROWSERSTACK_KEY"])
 except KeyError:
-    print("Ensure BROWSERSTACK_USERNAME and BROWSERSTACK_KEY has been set in environment variable.")
+    print("Ensure BROWSERSTACK_USERNAME and BROWSERSTACK_KEY has been set in environment variable.\n")
+    print("Command to set environment variable.\n")
+    print("export BROWSERSTACK_USERNAME='your_browserstack_username'.\n")
+    print("export BROWSERSTACK_KEY='your_browserstack_key'.\n")
+    print("source ~/.bash_profile")
     sys.exit(1)
 
 try:
@@ -24,15 +29,6 @@ except Exception:
     pass
 
 
-def rm_txt_from_downloads():
-    txt_files = os.listdir(DOWNLOAD_FOLDER)
-    for txt_file in txt_files:
-        if txt_file.endswith(".txt"):
-            os.remove(os.path.join(DOWNLOAD_FOLDER, txt_file))
-
-
-def rm_json_from_downloads():
-    json_files = os.listdir(DOWNLOAD_FOLDER)
-    for json_file in json_files:
-        if json_file.endswith(".json"):
-            os.remove(os.path.join(DOWNLOAD_FOLDER, json_file))
+def remove_and_create_download_folder():
+    shutil.rmtree(DOWNLOAD_FOLDER)
+    os.mkdir('downloads')

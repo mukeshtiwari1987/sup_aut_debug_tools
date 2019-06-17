@@ -1,8 +1,8 @@
 import os
-from flask import Flask, request, redirect, url_for, render_template, send_from_directory
+from flask import Flask, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 import requests
-from setup import UPLOAD_FOLDER, DOWNLOAD_FOLDER, rm_txt_from_downloads, rm_json_from_downloads
+from setup import UPLOAD_FOLDER, DOWNLOAD_FOLDER, remove_and_create_download_folder
 from command_parser import command_parser_main
 from vid_parser import vid_parser_main
 
@@ -58,7 +58,7 @@ def aut_ss_result():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             results = command_parser_main(filename)
-            rm_txt_from_downloads()
+            remove_and_create_download_folder()
             return render_template("autssresult.html", output_list=results)
     return render_template('upload_autss.html')
 
@@ -82,7 +82,7 @@ def aut_vid_result():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             results = vid_parser_main(filename)
-            rm_json_from_downloads()
+            remove_and_create_download_folder()
             return render_template("autvidresult.html", output_list=results)
     return render_template('upload_autvid.html')
 
