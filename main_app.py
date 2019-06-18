@@ -5,7 +5,7 @@ import requests
 from setup import UPLOAD_FOLDER, DOWNLOAD_FOLDER, remove_and_create_download_folder
 from command_parser import command_parser_main
 from vid_parser import vid_parser_main
-
+from console_parser import console_parser_main
 
 app = Flask(__name__, static_url_path="/static")
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -89,7 +89,27 @@ def aut_vid_result():
 
 @app.route('/autconsole')
 def aut_console():
-    return render_template('autconsole.html')
+    return render_template('upload_autconsole.html')
+
+
+@app.route('/consolestatusaut', methods=['POST'])
+def aut_console_result():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            print('No file attached in request')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            print('No file selected')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            search_text = request.form['search_text']
+            results = console_parser_main(filename, search_text)
+            remove_and_create_download_folder()
+            return render_template("autconsoleresult.html", output_list=results)
+    return render_template('upload_autvid.html')
 
 
 if __name__ == '__main__':

@@ -4,7 +4,7 @@ import logging
 import json
 from parallel_download import download
 from setup import UPLOAD_FOLDER, DOWNLOAD_FOLDER, BROWSERSTACK_AUT_SESSION_LOG_URL
-from vid_parallel import main_cu
+from vid_parallel import vid_parallel_download
 
 LOG_FILENAME = 'debug.log'
 format_string = '%(levelname)s: %(asctime)s: %(message)s'
@@ -39,7 +39,7 @@ def vid_status_with_session(meta_info_list):
         video_url_list.append(video_url_dict)
 
     thread = 10
-    video_url_dict_list = main_cu(thread, video_url_list)
+    video_url_dict_list = vid_parallel_download(thread, video_url_list)
 
     return video_url_dict_list
 

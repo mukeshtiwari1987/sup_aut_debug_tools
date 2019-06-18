@@ -24,11 +24,9 @@ class DownloadThread(threading.Thread):
             self.queue.task_done()
 
     def download_url(self, url):
-        # change it to a different way if you require
-        session_id = url.split('/')[-1]
+        session_id = url.split('/')[-2]
         log_filename_dest = os.path.join(self.destfolder, session_id)
 
-        # print("[{}] Downloading {} -> {}".format(self.ident, url, log_filename_dest ))
         response = requests.get(url, auth=AUTH)
 
         with open(log_filename_dest, 'wb') as filename:

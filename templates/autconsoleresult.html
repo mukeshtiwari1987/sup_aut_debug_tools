@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% block head %}
+{{ super() }}
+
+<script type="text/javascript">
+
+  function searchRows(tblId) {
+  var tbl = document.getElementById(tblId);
+  var headRow = tbl.rows[0];
+  var arrayOfHTxt = new Array();
+  var arrayOfHtxtCellIndex = new Array();
+
+  for (var v = 0; v < headRow.cells.length; v++) {
+   if (headRow.cells[v].getElementsByTagName('input')[0]) {
+   var Htxtbox = headRow.cells[v].getElementsByTagName('input')[0];
+    if (Htxtbox.value.replace(/^\s+|\s+$/g, '') != '') {
+      arrayOfHTxt.push(Htxtbox.value.replace(/^\s+|\s+$/g, ''));
+      arrayOfHtxtCellIndex.push(v);
+    }
+   }
+  }
+
+  for (var i = 1; i < tbl.rows.length; i++) {
+      tbl.rows[i].style.display = 'table-row';
+      for (var v = 0; v < arrayOfHTxt.length; v++) {
+          var CurCell = tbl.rows[i].cells[arrayOfHtxtCellIndex[v]];
+          var CurCont = CurCell.innerHTML.replace(/<[^>]+>/g, "");
+          var reg = new RegExp(arrayOfHTxt[v] + ".*", "i");
+          if (CurCont.match(reg) == null) {
+              tbl.rows[i].style.display = 'none';
+         }
+      }
+    }
+  }
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="table-container">
+  <table class="steelBlueCols" id="my_table">
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Created Day
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>User ID
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>Build Name
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>Build ID
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>Session Name
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>Session ID
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>OS
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>OS Version
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>Browser
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>Browser Version
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>Status
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for index in range(0, output_list|length) %}
+        <tr>
+          <td data-column="S.No"> {{ index + 1 }} </td>
+          <td data-column="Created Day">{{ output_list[index]['created_day']}}</td>
+          <td data-column="User ID">{{ output_list[index]['user_id']}}</td>
+          <td data-column="Build Name">{{ output_list[index]['build_name']}}</td>
+          <td data-column="Build ID">{{ output_list[index]['build_id']}}</td>
+          <td data-column="Session Name">{{ output_list[index]['session_name']}}</td>
+          <td data-column="Session ID">{{ output_list[index]['hashed_id']}}</td>
+          <td data-column="OS">{{ output_list[index]['os']}}</td>
+          <td data-column="OS Version">{{ output_list[index]['os_version']}}</td>
+          <td data-column="Browser">{{ output_list[index]['browser']}}</td>
+          <td data-column="Browser Version">{{ output_list[index]['browser_version']}}</td>
+          <td data-column="Status">{{ output_list[index]['status']}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

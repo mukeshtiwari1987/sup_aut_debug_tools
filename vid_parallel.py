@@ -19,7 +19,7 @@ def check_url(video_url_list):
     return video_url_dict
 
 
-def main_cu(thread, video_url_list):
+def vid_parallel_download(thread, video_url_list):
     p = Pool(processes=thread)
     result = p.map(check_url, video_url_list)
 
