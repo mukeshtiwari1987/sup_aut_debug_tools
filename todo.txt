@@ -1,4 +1,1 @@
-
-index out of bound error on  "command_response_time": command_response_time_list[i].strftime('%Y-%m-%d %H:%M:%S:%f')
-console log searcher
 Logging after every step
