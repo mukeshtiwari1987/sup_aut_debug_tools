@@ -8,6 +8,7 @@ from vid_parser import vid_parser_main
 from console_parser import console_parser_main
 from networklog_parser import network_parser_main
 from seleniumlog_parser import selenium_parser_main
+from appiumlog_parser import appium_parser_main
 
 app = Flask(__name__, static_url_path="/static")
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -162,6 +163,31 @@ def aut_selenium_result():
             remove_and_create_download_folder()
             return render_template("autseleniumresult.html", output_list=results)
     return render_template('upload_autselenium.html')
+
+
+@app.route('/autappium')
+def aut_appium():
+    return render_template('upload_autappium.html')
+
+
+@app.route('/appiumstatusaut', methods=['POST'])
+def aut_appium_result():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            print('No file attached in request')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            print('No file selected')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            search_text = request.form['search_text']
+            results = appium_parser_main(filename, search_text)
+            remove_and_create_download_folder()
+            return render_template("autappiumresult.html", output_list=results)
+    return render_template('upload_autappium.html')
 
 
 if __name__ == '__main__':
