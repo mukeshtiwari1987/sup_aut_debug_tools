@@ -3,7 +3,7 @@
 {% block content %}
 <div class="sqlquery">
   SELECT
-    <br>DATE(created_day) AS created_day,
+    DATE(created_day) AS created_day,
     user.user_id AS user_id,
     build_name,
     build_id,
@@ -14,7 +14,7 @@
     browser,
     browser_version,
     status
-  <br>FROM</br>
+  <br>FROM
     [browserstack-production:automate.automate_test_sessions_partitioned]
   <br>WHERE</br>
     _PARTITIONTIME >= "2019-06-14 00:00:00"
@@ -22,7 +22,7 @@
     AND created_at >= "2019-06-14 00:00:00"
     AND created_at < "2019-06-15 00:00:00"
     AND user.group_id = 2
-  <br>LIMIT</br>
+  <br>LIMIT
     100
 </div>
 <div class="log-form file-upload-form">
