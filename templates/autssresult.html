@@ -1,18 +1,15 @@
 {% extends "layout.html" %}
 {% block head %}
 {{ super() }}
-
 <script type="text/javascript">
 $(document).ready(function() {
-    $(".showdiv").click(function () {
-    $(".cinfo").show();
-  });
-    $(".hidediv").click(function () {
-    $(".cinfo").hide();
+  $('.cinfo').hide();
+  $('#shownhide').on('click', function() {
+    $('.cinfo').toggle(100);
+    $('#shownhide').text('Hide');
   });
 });
 </script>
-
 {% endblock %}
 
 {% block content %}
@@ -64,11 +61,23 @@ $(document).ready(function() {
         <th>Status
           <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
         </th>
-        <th>Zero To Two</th>
-        <th>Two to Five</th>
-        <th>Six to Ten</th>
-        <th>Ten to Fifteen</th>
-        <th>More than Fifteen</th>
+        <th>
+          <button id="shownhide" style="color: black;">Show</button>
+          Zero To Two
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>Two to Five
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>Six to Ten
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>Ten to Fifteen
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
+        <th>More than Fifteen
+          <input onkeyup="searchRows('my_table')" type="text" style="color:black"/>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -93,8 +102,6 @@ $(document).ready(function() {
           <td data-column="Browser Version">{{ output_list[index]['browser_version']}}</td>
           <td data-column="Status">{{ output_list[index]['status']}}</td>
           <td data-column="Zero To Two">
-            <button class="hidediv">Collapse</button>
-            <button class="showdiv">Expand</button>
             <div class="resinsec">
               {{ output_list[index]['zero_to_two']}}
             </div>
