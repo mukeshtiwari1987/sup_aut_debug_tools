@@ -1,1 +1,5 @@
 Logging after every step
+Stacked Bar Chart
+Progress Bar
+Refactor
+App Automate
